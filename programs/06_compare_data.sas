@@ -1,5 +1,5 @@
 %* update this location to your own location;
-%let project_folder=/_github/lexjansen/dataset-json-sas;
+%let project_folder=/home/&SYSUSERID/cdisc-int2024-dataset-json-sas;
 %include "&project_folder/programs/config.sas";
 
 
@@ -10,7 +10,7 @@ title01 "Compare Detail - &now_iso8601";
 /* Compare ADaM datasets */
 /* Get the names of the SAS datasets */
 proc sql noprint;
-  create table work.members 
+  create table work.members
   as select upcase(memname) as name
   from dictionary.tables
   where libname="DATAADAM" and memtype="DATA"
@@ -19,7 +19,7 @@ quit;
 
 %if %cstutilnobs(_cstDataSetName=members)=0 %then %do;
   %put WAR%str(NING): No datasets to compare.;
-%end;  
+%end;
 
 %create_template(type=COMPARE_RESULTS, out=results.dataset_compare_results);
 
@@ -42,7 +42,7 @@ run;
 /* Compare SDTM datasets */
 /* Get the names of the SAS datasets */
 proc sql noprint;
-  create table work.members 
+  create table work.members
   as select upcase(memname) as name
   from dictionary.tables
   where libname="DATASDTM" and memtype="DATA"
@@ -51,7 +51,7 @@ quit;
 
 %if %cstutilnobs(_cstDataSetName=members)=0 %then %do;
   %put WAR%str(NING): No datasets to compare.;
-%end;  
+%end;
 
 data _null_;
   length code $400;
@@ -72,7 +72,7 @@ run;
 /* Compare SEND datasets */
 /* Get the names of the SAS datasets */
 proc sql noprint;
-  create table work.members 
+  create table work.members
   as select upcase(memname) as name
   from dictionary.tables
   where libname="DATASEND" and memtype="DATA"
@@ -81,7 +81,7 @@ quit;
 
 %if %cstutilnobs(_cstDataSetName=members)=0 %then %do;
   %put WAR%str(NING): No datasets to compare.;
-%end;  
+%end;
 
 data _null_;
   length code $400;
@@ -104,7 +104,7 @@ ods html5 path="&project_folder/programs" file="07_compare_data_summary_&today_i
   proc print data=results.dataset_compare_results label;
     title01 "Compare Summary - &now_iso8601";
   run;
-  
+
 ods html5 close;
 ods listing;
 title01;
