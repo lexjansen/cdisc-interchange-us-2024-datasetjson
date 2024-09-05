@@ -1,5 +1,7 @@
 options sasautos = ("&project_folder/macros" %qsysfunc(compress(%qsysfunc(getoption(SASAUTOS)),%str(%()%str(%)))));
-options ls=max;
+options ls=max msglevel=i nocenter nonumer lrecl=max compress=yes reuse=yes nofmterr;
+options nofullstimer nomprint nomlogic nosymbolgen;
+
 filename luapath ("&project_folder/lua");
 
 %let now_iso8601=%sysfunc(datetime(), is8601dt.);
@@ -23,5 +25,3 @@ libname metasvse "&project_folder/metadata_save/send";
 
 libname results "&project_folder/results";
 libname macros "&project_folder/macros";
-
-options nomprint nomlogic nosymbolgen;
