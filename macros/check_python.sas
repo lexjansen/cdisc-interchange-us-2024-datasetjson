@@ -31,13 +31,12 @@
     https://go.documentation.sas.com/doc/en/bicdc/9.4/biasag/n1mquxnfmfu83en1if8icqmx8cdf.htm
 
   @author Lex Jansen
-  @date 2024-09-11
-  
+
 **/
 %macro check_python() / des = 'Checks that your SAS environment is able to run Python objects';
 
-  %local 
-    _MAS_PYPATH 
+  %local
+    _MAS_PYPATH
     _MAS_M2PATH
     ;
 
@@ -53,23 +52,23 @@
     %put ERR%str(OR): [&sysmacroname] Environment variable MAS_M2PATH has not been defined. %str
       ()As a result, Python scripts cannot be executed.;
     %goto exit_macro;
-  %end;    
+  %end;
 
   %if %sysfunc(fileexist(&_MAS_PYPATH)) = 0 %then %do;
     %put ERR%str(OR): [&sysmacroname] File &_MAS_PYPATH does not exist. %str
       ()As a result, Python scripts cannot be executed.;
     %goto exit_macro;
   %end;
-    
+
   %if %sysfunc(fileexist(&_MAS_M2PATH)) = 0 %then %do;
     %put ERR%str(OR): [&sysmacroname] File &_MAS_M2PATH does not exist. %str
       ()As a result, Python scripts cannot be executed.;
     %goto exit_macro;
   %end;
-  
+
   %put MAS_PYPATH = &_MAS_PYPATH;
   %put MAS_M2PATH = &_MAS_M2PATH;
-    
-  %exit_macro:    
-  
+
+  %exit_macro:
+
 %mend check_python;
