@@ -1,3 +1,42 @@
+/**
+  @file read_datasetjson.sas
+  @brief Read a Dataset-JSON file to a SAS dataset.
+
+  @details This macro creates a SAS dataset from a Dataset-JSON file<br />
+  Optionally, the dataset-JSON metadata is saved in a number of metadata tables:
+  @li metadata_study
+  @li metadata_tables
+  @li metadata_columns
+
+  Example usage:
+  
+      %read_datasetjson(
+          jsonpath=&project_folder/json_out/sdtm/dm.json,
+          datalib=datasdtm
+          );
+
+      %read_datasetjson(
+          jsonpath=&project_folder/json_out/sdtm/dm.json,
+          datalib=datasdtm
+          savemetadata=Y, 
+          metadatalib=metasdtm);
+
+  @author Lex Jansen
+  @date 2024-09-11
+  
+  @param[in] jsonpath= Path to Dataset-JSON file
+  @param[in] jsonfref= File reference for the Dataset-JSON file. Either jsonpath or jsonfref has to be sppecified.
+  @param[out] datalib= Library to save SAS data set
+  @param[in] savemetadata= (Y) Use Define-XML metadata? (Y/N)
+  @param[out] metadatalib= (work) Library to save the metadata datasets
+    The following datasets are saved: 
+    @li metadata_study
+    @li metadata_tables
+    @li metadata_columns
+  @param[in] dropseqvar= (Y) Drop record sequence variable? (Y/N)
+    
+**/
+
 %macro read_datasetjson(
   jsonpath=,
   jsonfref=,

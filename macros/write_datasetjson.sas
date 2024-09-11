@@ -1,3 +1,60 @@
+/**
+  @file write_datasetjson.sas
+  @brief Write a SAS dataset to a Dataset-JSON file.
+
+  @details This macro creates a Dataset-JSON file from a SAS dataset<br />
+  Metadata is taken from the dataset or from a number of metadata tables:
+  @li metadata_study
+  @li metadata_tables
+  @li metadata_columns
+  
+  Some metadata can be specified as parameters 
+  (fileOID, originator, sourceSystem, sourceSystemVersion, 
+  studyOID, metaDataVersionOID, metaDataRef, datasetlabel).
+  
+  Example usage:
+  
+      %write_datasetjson(
+          dataset=datasdtm.dm, 
+          jsonpath=&project_folder/json_out/sdtm/dm.json);
+
+      %write_datasetjson(
+          dataset=datasdtm.dm, 
+          jsonpath=&project_folder/json_out/sdtm/dm.json, 
+          usemetadata=Y, 
+          metadatalib=metasdtm);
+
+  @author Lex Jansen
+  @date 2024-09-11
+  
+  @param[in] dataset= (libname.)memname of the SAS data set
+  @param[out] jsonpath= Path to Dataset-JSON file
+  @param[out] jsonfref= File reference for the Dataset-JSON file. 
+                        Either jsonpath or jsonfref has to be sppecified.
+  @param[in] usemetadata= (N) Use Define-XML metadata? (Y/N)
+  @param[in] metadatalib= Define-XML metadata library
+    The following datasets are expected: 
+    @li metadata_study
+    @li metadata_tables
+    @li metadata_columns
+  @param[in] decimalVariables= List of numeric variables to write as decimal strings. 
+    Not used when usemetadata=Y. Separated by blanks.
+  @param[in] datasetJSONVersion= (1.1.0) Dataset-JSON version. Allowed values: 1.1.*
+  @param[in] originator= The organization that generated the Dataset-JSON dataset.
+  @param[in] sourceSystem= The name of the information system from which the content of this dataset was sourced
+  @param[in] sourceSystemVersion= The version of the information system from which the content of this dataset was sourced
+  @param[in] studyOID= Unique identifier for the study that may also function as a foreign key to a Study/\@OID in an associated Define-XML file
+  @param[in] metaDataVersionOID= Unique identifier for the metadata version that may also function as a foreign key to a MetaDataVersion/\@OID in an associated Define-XML file
+  @param[in] metaDataRef= URI for a metadata file describing the dataset (e.g., a Define-XML file)
+  @param[in] datasetlabel= Dataset label
+  @param[in] pretty= (NOPRETTY) Format Dataset-JSON file (PRETTY/NOPRETTY).
+    
+  <h4> Related Macros </h4>
+  @li write_datasetjson_1_0.sas
+  @li write_datasetjson_1_1.sas
+
+**/
+
 %macro write_datasetjson(
   dataset=,
   jsonpath=,

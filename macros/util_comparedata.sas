@@ -1,3 +1,19 @@
+/**
+  @file util_comparedata.sas
+  @brief Compare 2 libraries with SAS datasets.
+
+  @details
+
+  @author Lex Jansen
+
+  @param[in] baselib= The reference library of SAS data sets
+  @param[in] complib= The library of SAS data sets that is compared against the reference library
+  @param[in] dsname= One level dataset name
+  @param[in] compareoptions= (%str(listall criterion=0.00000001 method=absolute)) Extra options to be added to PROC COMPARE
+  @param[out] resultds= Results dataset
+  @param[in] detaillevel= (2) The minimum PROC COMPARE return code for which detailed compare info will be presented.
+
+**/
 %macro util_comparedata(
   baselib=, 
   complib=, 
@@ -5,7 +21,7 @@
   compareoptions=%str(listall criterion=0.00000001 method=absolute),
   resultds=,
   detaillevel=2
-  );
+  ) / des = 'Compare 2 libraries with SAS datasets';
 
   %local compinfo _Random today_iso8601;
 
