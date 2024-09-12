@@ -12,7 +12,8 @@
 
       %read_datasetjson(
           jsonpath=&project_folder/json_out/sdtm/dm.json,
-          datalib=datasdtm
+          datalib=datasdtm,
+          savemetadata=N
           );
 
       %read_datasetjson(
