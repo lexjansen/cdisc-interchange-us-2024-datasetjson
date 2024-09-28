@@ -28,6 +28,5 @@ ENV/
 *.sas7b*
 *.egp
 develop/
-define*.html
 programs/*.html
 programs/*.cmd
