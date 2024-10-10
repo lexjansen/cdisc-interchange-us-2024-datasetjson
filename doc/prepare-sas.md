@@ -8,7 +8,7 @@ Active participation in the SAS part of Dataset-JSON workshop requires a SAS pro
 3. Set up SAS On-Demand account by signing in with your SAS profile at: <https://welcome.oda.sas.com/>
   This might take 10 minutes, after which you will receive an email:
   **You are ready to start using SAS OnDemand for Academics**.
-4. Go to <https://welcome.oda.sas.com/> and click the blue button to **Launch** SAS Studio.
+4. Go to <https://welcome.oda.sas.com/>, sign in with your SAS Profile (upper right), and click the blue button to **Launch** SAS Studio.
 
 ![SAS Studio](images/sas-studio.png)
 
