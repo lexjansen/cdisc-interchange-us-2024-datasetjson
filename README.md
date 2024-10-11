@@ -10,7 +10,7 @@ This repository is adapted from the [https://github.com/lexjansen/dataset-json-s
 ### Resources
 
 - [Learner preparation - SAS](doc/prepare-sas.md)
-- [JSONPath Online Evaluator](https://jsonpath.com/)
+- [https://jsonformatter.org](https://jsonformatter.org)
 
 ### SAS® OnDemand
 

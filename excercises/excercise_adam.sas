@@ -94,7 +94,8 @@ run;
     sourceSystemVersion=,
     studyOID=&_studyOID,
     metaDataVersionOID=&_metaDataVersionOID,
-    metaDataRef=define.xml
+    metaDataRef=define.xml,
+    pretty=PRETTY
     );
     
 
