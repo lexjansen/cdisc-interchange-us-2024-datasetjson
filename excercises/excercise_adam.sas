@@ -1,5 +1,4 @@
-%*let project_folder=/home/&SYSUSERID/cdisc-int2024-dataset-json-sas; 
-%let project_folder=/_github/lexjansen/cdisc-interchange-us-2024-datasetjson;
+%let project_folder=/home/&SYSUSERID/cdisc-int2024-dataset-json-sas; 
 %include "&project_folder/programs/config.sas";
 
 /* Convert ADaM v5 XPT files to SAS datasets */
