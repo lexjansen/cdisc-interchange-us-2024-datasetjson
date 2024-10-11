@@ -1,5 +1,5 @@
 %* update this location to your own location;
-%let project_folder=/_github/lexjansen/cdisc-interchange-us-2024-datasetjson;
+%let project_folder=/home/&SYSUSERID/cdisc-int2024-dataset-json-sas;
 %include "&project_folder/programs/config.sas";
 
 /*
@@ -41,7 +41,8 @@ options cmplib=&fcmplib..datasetjson_funcs;
 %let json_schema=&project_folder/schema/dataset.schema1-1-0.json;
 %let json_folder=&project_folder/json_out;
 
-
+/* Check to see if we can execute Python */
+%global python_installed;
 %check_python();
 
 
@@ -58,9 +59,11 @@ data work.dirtree_adam;
   length result_code 8 result_character result_path $255 json_file json_schema $512;
   retain json_schema "&json_schema";
   call missing(result_code, result_character, result_path);
-
-  call validate_datasetjson(json_file, json_schema, result_code, result_character, result_path);
-  if result_code = 1 then putlog 'ERR' 'OR:' json_file= result_character= result_path=;
+  result_character = "Validation can not be executed";
+  %if &python_installed %then %do;
+    call validate_datasetjson(json_file, json_schema, result_code, result_character, result_path);
+    if result_code = 1 then putlog 'ERR' 'OR:' json_file= result_character;
+  %end;
 run;
 
 
@@ -77,9 +80,11 @@ data work.dirtree_sdtm;
   length result_code 8 result_character result_path $255 json_file json_schema $512;
   retain json_schema "&json_schema";
   call missing(result_code, result_character, result_path);
-
-  call validate_datasetjson(json_file, json_schema, result_code, result_character, result_path);
-  if result_code = 1 then putlog 'ERR' 'OR:' json_file= result_character;
+  result_character = "Validation can not be executed";
+  %if &python_installed %then %do;
+    call validate_datasetjson(json_file, json_schema, result_code, result_character, result_path);
+    if result_code = 1 then putlog 'ERR' 'OR:' json_file= result_character;
+  %end;
 run;
 
 
@@ -96,9 +101,11 @@ data work.dirtree_send;
   length result_code 8 result_character result_path $255 json_file json_schema $512;
   retain json_schema "&json_schema";
   call missing(result_code, result_character, result_path);
-
-  call validate_datasetjson(json_file, json_schema, result_code, result_character, result_path);
-  if result_code = 1 then putlog 'ERR' 'OR:' json_file= result_character;
+  result_character = "Validation can not be executed";
+  %if &python_installed %then %do;
+    call validate_datasetjson(json_file, json_schema, result_code, result_character, result_path);
+    if result_code = 1 then putlog 'ERR' 'OR:' json_file= result_character;
+  %end;
 run;
 
 
