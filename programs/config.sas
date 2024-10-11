@@ -25,3 +25,6 @@ libname metasvse "&project_folder/metadata_save/send";
 
 libname results "&project_folder/results";
 libname macros "&project_folder/macros";
+
+%let _cst_rc=;
+%let _cst_rcmsg=;

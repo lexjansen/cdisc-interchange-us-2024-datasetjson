@@ -1,10 +1,7 @@
 %* update this location to your own location;
-%let project_folder=/home/&SYSUSERID/cdisc-int2024-dataset-json-sas;
+%let project_folder=/home/&SYSUSERID/cdisc-int2024-dataset-json-sas; 
 %include "&project_folder/programs/config.sas";
 
-
-%let _cst_rc=;
-%let _cst_rcmsg=;
 
 /* Convert ADaM v5 XPT files to SAS datasets */
 %cstutilxptread(
