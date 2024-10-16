@@ -86,5 +86,13 @@ run;
     );
 
 /* Compare original and created dataset */
-proc compare base=datasend.&dataset compare=outsend.&dataset criterion=0.000000000001 method=absolute listall;
+ods listing close;
+ods html5 path="&project_folder/excercises" file="compare_data_send.html";
+
+  proc compare base=datasend.&dataset compare=outsend.&dataset criterion=0.000000000001 method=absolute listall;
+    title01 "PROC COMPARE results - user &SYSUSERID";
+  run;
+
+ods html5 close;
+ods listing;
 run;

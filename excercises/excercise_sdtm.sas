@@ -86,5 +86,12 @@ run;
     );
 
 /* Compare original and created dataset */
-proc compare base=datasdtm.&dataset compare=outsdtm.&dataset criterion=0.000000000001 method=absolute listall;
-run;
+ods listing close;
+ods html5 path="&project_folder/excercises" file="compare_data_sdtm.html";
+
+  proc compare base=datasdtm.&dataset compare=outsdtm.&dataset criterion=0.000000000001 method=absolute listall;
+    title01 "PROC COMPARE results - user &SYSUSERID";
+  run;
+
+ods html5 close;
+ods listing;
