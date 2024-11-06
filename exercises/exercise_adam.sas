@@ -113,7 +113,7 @@ run;
 
 /* Compare original and created dataset */
 ods listing close;
-ods html5 path="&project_folder/excercises" file="compare_data_adam.html";
+ods html5 path="&project_folder/exercises" file="compare_data_adam.html";
 
   proc compare base=dataadam.&dataset compare=outadam.&dataset criterion=0.000000000001 method=absolute listall;
     title01 "PROC COMPARE results - user &SYSUSERID";
