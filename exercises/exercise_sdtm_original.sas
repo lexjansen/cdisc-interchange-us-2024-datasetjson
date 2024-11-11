@@ -80,7 +80,6 @@ run;
 %read_datasetjson(
     jsonpath=&project_folder/json_out/sdtm/&dataset..json,
     datalib=outsdtm,
-    dropseqvar=Y,
     savemetadata=Y,
     metadatalib=metasvad
     );
