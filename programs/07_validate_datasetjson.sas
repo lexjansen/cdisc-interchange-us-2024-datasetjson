@@ -1,5 +1,5 @@
 %* update this location to your own location;
-%let project_folder=/home/&SYSUSERID/cdisc-int2024-dataset-json-sas;
+%let project_folder=C:\_github\lexjansen\cdisc-interchange-us-2024-datasetjson;
 %include "&project_folder/programs/config.sas";
 
 /*
@@ -56,12 +56,12 @@ options cmplib=&fcmplib..datasetjson_funcs;
 
 data work.dirtree_adam;
   set work.dirtree_adam(rename=fullpath=json_file);
-  length result_code 8 result_character result_path $255 json_file json_schema $512;
+  length datetime $32 result_code 8 result_character result_path $255 json_file json_schema $512;
   retain json_schema "&json_schema";
-  call missing(result_code, result_character, result_path);
+  call missing(datetime, result_code, result_character, result_path);
   result_character = "Validation can not be executed";
   %if &python_installed %then %do;
-    call validate_datasetjson(json_file, json_schema, result_code, result_character, result_path);
+    call validate_datasetjson(json_file, json_schema, datetime, result_code, result_character, result_path);
     if result_code = 1 then putlog 'ERR' 'OR:' json_file= result_character;
   %end;
 run;
@@ -77,12 +77,12 @@ run;
 
 data work.dirtree_sdtm;
   set work.dirtree_sdtm(rename=fullpath=json_file);
-  length result_code 8 result_character result_path $255 json_file json_schema $512;
+  length datetime $32 result_code 8 result_character result_path $255 json_file json_schema $512;
   retain json_schema "&json_schema";
-  call missing(result_code, result_character, result_path);
+  call missing(datetime, result_code, result_character, result_path);
   result_character = "Validation can not be executed";
   %if &python_installed %then %do;
-    call validate_datasetjson(json_file, json_schema, result_code, result_character, result_path);
+    call validate_datasetjson(json_file, json_schema, datetime, result_code, result_character, result_path);
     if result_code = 1 then putlog 'ERR' 'OR:' json_file= result_character;
   %end;
 run;
@@ -98,12 +98,12 @@ run;
 
 data work.dirtree_send;
   set work.dirtree_send(rename=fullpath=json_file);
-  length result_code 8 result_character result_path $255 json_file json_schema $512;
+  length datetime $32 result_code 8 result_character result_path $255 json_file json_schema $512;
   retain json_schema "&json_schema";
-  call missing(result_code, result_character, result_path);
+  call missing(datetime, result_code, result_character, result_path);
   result_character = "Validation can not be executed";
   %if &python_installed %then %do;
-    call validate_datasetjson(json_file, json_schema, result_code, result_character, result_path);
+    call validate_datasetjson(json_file, json_schema, datetime, result_code, result_character, result_path);
     if result_code = 1 then putlog 'ERR' 'OR:' json_file= result_character;
   %end;
 run;
@@ -118,7 +118,7 @@ data results.schema_validation_results;
 run;
 
 ods listing close;
-ods html5 path="&project_folder/programs" file="08_validate_datasetjson_results_&today_iso8601..html";
+ods html5 path="&project_folder/programs" file="07_validate_datasetjson_results_&today_iso8601..html";
 
   proc print data=results.schema_validation_results label;
     title01 "Validation Results - &now_iso8601";

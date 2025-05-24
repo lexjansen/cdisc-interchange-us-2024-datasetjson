@@ -23,21 +23,32 @@
   detaillevel=2
   ) / des = 'Compare 2 libraries with SAS datasets';
 
-  %local compinfo _Random today_iso8601;
+  %local 
+    compinfo 
+    _Random 
+    now_iso8601 
+    _SaveOptions
+    ;
 
   %let _Random=%sysfunc(putn(%sysevalf(%sysfunc(ranuni(0))*10000,floor),z4.));
-  %let today_iso8601=%sysfunc(datetime(), is8601dt.);
+  %let now_iso8601=%sysfunc(datetime(), is8601dt.);
+
+  %* Since JSON keys are case-sensitive, it is required that metadata datasets have case-sensitive columns;
+  %local _SaveOptions;
+  %let _SaveOptions = %sysfunc(getoption(validvarname, keyword));
+  options validvarname = V7;
 
   proc compare base=&baselib..&dsname compare=&complib..&dsname %NRBQUOTE(&compareoptions) noprint;
   run;
 
   %let compinfo=&sysinfo;
   data work.compare_results_&_Random(
-    keep=baselib baselib_path complib complib_path dataset_name result_code result_character
+    keep=datetime baselib baselib_path complib complib_path dataset_name result_code result_character
     );
-    length result_code 8 result_character restmp $512 dataset_name $32 baselib complib $8
+    length datetime $32 result_code 8 result_character restmp $512 dataset_name $32 baselib complib $8
            complib_path baselib_path $1024;
     array r(*) 8 r1 r2 r3 r4 r5 r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16;
+    datetime = "&now_iso8601";
     result_code=&compinfo;
     result_character="";
     restmp='/DSLABEL/DSTYPE/INFORMAT/FORMAT/LENGTH/LABEL/BASEOBS/COMPOBS'||
@@ -72,7 +83,7 @@
 
   %if &compinfo ge &detaillevel %then %do;
     proc compare base=&baselib..&dsname compare=&complib..&dsname listall %NRBQUOTE(&compareoptions);
-      title "Compare results for dataset %upcase(&dsname) - &today_iso8601";
+      title "Compare results for dataset %upcase(&dsname) - &now_iso8601";
     run;
   %end;
 
@@ -84,5 +95,8 @@
 
   proc delete data=work.compare_results_&_Random;
   run;
+  
+  %* Reset VALIDVARNAME option to original value;
+  options &_SaveOptions;  
 
 %mend util_comparedata;

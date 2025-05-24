@@ -77,6 +77,7 @@
     _Random
     _SaveOptions1
     _SaveOptions2
+    _SaveOptions3
     _Missing
     _create_temp_dataset_sas
     dataset_new dataset_name dataset_label _records
@@ -94,6 +95,9 @@
   %let _SaveOptions2 = %sysfunc(getoption(compress, keyword)) %sysfunc(getoption(reuse, keyword));
   options dlcreatedir;
   options compress=Yes reuse=Yes;
+  %* Since JSON keys are case-sensitive, it is required that metadata datasets have case-sensitive columns;
+  %let _SaveOptions3 = %sysfunc(getoption(validvarname, keyword));
+  options validvarname = V7;
 
   %if %sysevalf(%superq(datasetJSONVersion)=, boolean) %then %let datasetJSONVersion = %str(1.1.0);
 
@@ -305,6 +309,28 @@
         if dataType in ("date", "datetime", "time") and targetDataType = "integer" and missing(displayFormat)
           then putlog "WAR" "NING: [&sysmacroname] Missing displayFormat for variable: &dataset.." name +(-1) ", " oid= +(-1) ", " dataType= +(-1) ", " targetDataType=;
 
+        if dataType in ("date", "datetime", "time", "integer") and missing(targetDataType) and 
+            (
+              (find(displayFormat, "E8601DA", 'it') or find(displayFormat, "DATE", 'it')) or
+              (find(displayFormat, "E8601TM", 'it') or find(displayFormat, "TIME", 'it')) or
+              (find(displayFormat, "E8601DT", 'it') or find(displayFormat, "DATETIME", 'it'))
+            ) then do;
+            putlog "WAR" "NING: [&sysmacroname] Missing targetDataType for variable: &dataset.." name +(-1) ", " oid= +(-1) ", " dataType= +(-1) ", " displayFormat=;
+            targetDataType = "integer";
+            if dataType = "integer" then do;
+                if (find(displayFormat, "E8601DA", 'it') or find(displayFormat, "DATE", 'it')) then do;
+                  dataType = "date";
+                end;
+                if (find(displayFormat, "E8601TM", 'it') or find(displayFormat, "TIME", 'it')) then do;
+                  dataType = "time";
+                end;
+                if (find(displayFormat, "E8601DT", 'it') or find(displayFormat, "DATETIME", 'it')) then do;
+                  dataType = "datetime";
+                end;
+            end;
+            putlog "WAR" "NING: [&sysmacroname] dataType set to """ dataType +(-1) """, targetDataType set to ""integer""";
+        end;
+        if dataType = "string" then displayFormat = "";
     run;
 
 
@@ -378,6 +404,7 @@
       end;
       else do;
         dataType="string";
+        displayFormat="";
       end;
       /* Numeric datetime, date, and time variables will be transfered as ISO 8601 strings */
       if not (missing(displayFormat)) then do;
@@ -395,8 +422,10 @@
         end;
       end;
 
-      if formatl gt 0 then displayFormat=cats(displayFormat, put(formatl, best.), ".");
-      if formatd gt 0 then displayFormat=cats(displayFormat, put(formatd, best.));
+      if (sas_type = 1) then do;
+        if formatl gt 0 then displayFormat=cats(displayFormat, put(formatl, best.), ".");
+        if formatd gt 0 then displayFormat=cats(displayFormat, put(formatd, best.));
+      end;
       %* put a dot on the end of format if we are still missing it;
       if (not missing(displayFormat)) and index(displayFormat,'.')=0 then displayFormat=strip(displayFormat)||'.';
       if missing(label) then do;
@@ -544,5 +573,6 @@
   %* Restore options;
   options &_SaveOptions1;
   options &_SaveOptions2;
+  options &_SaveOptions3;
 
 %mend write_datasetjson;

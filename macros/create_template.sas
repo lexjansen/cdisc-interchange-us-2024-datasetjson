@@ -16,6 +16,12 @@
 
 %macro create_template(type=, out=) / des = 'Create a SAS dataset template';
 
+  %* Since JSON keys are case-sensitive, it is required that metadata datasets have case-sensitive columns;
+  %local _SaveOptions;
+  %let _SaveOptions = %sysfunc(getoption(validvarname, keyword));
+  options validvarname = V7;
+
+
   %if %upcase(&type) eq STUDY %then %do;
     proc sql;
       create table &out
@@ -76,6 +82,7 @@
     proc sql;
     create table &out
       (
+       datetime char(32) label="Time stamp",
        dataset_name char(32) label="SAS Dataset Name",
        baselib char(8) label="Base Library",
        baselib_path char(1024) label="Base Library Path",
@@ -91,6 +98,7 @@
     proc sql;
     create table &out
       (
+       datetime char(32) label="Time stamp",
        json_file char(1024) label="Dataset-JSON File",
        json_schema char(1024) label="Dataset-JSON Schema",
        result_code num label="Validation Result (Numeric)",
@@ -99,6 +107,9 @@
       );
     quit;
   %end;
+
+  %* Reset VALIDVARNAME option to original value;
+  options &_SaveOptions;
 
 %mend;
   
