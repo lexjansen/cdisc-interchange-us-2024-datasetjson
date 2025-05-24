@@ -1,4 +1,5 @@
-options sasautos = ("&project_folder/macros" %qsysfunc(compress(%qsysfunc(getoption(SASAUTOS)),%str(%()%str(%)))));
+options sasautos = ("&project_folder/macros" "&project_folder/macros/internal" 
+                    %qsysfunc(compress(%qsysfunc(getoption(SASAUTOS)),%str(%()%str(%)))));
 options ls=max msglevel=i nocenter nonumber lrecl=max compress=yes reuse=yes nofmterr;
 options nofullstimer nomprint nomlogic nosymbolgen;
 
